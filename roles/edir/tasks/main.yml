@@ -1,0 +1,83 @@
+---
+# This playbook will install eDirectory.
+
+- name: Download eDirectory packages
+  get_url: url={{ Repo }}/{{ item }} dest={{ BaseDir }}/{{ item }}
+  with_items:
+   - base.tgz
+   - eDir9.tgz
+   - eDir9-upd.tgz
+
+- name: Unpack eDirectory packages
+  shell: "tar zxvf {{ BaseDir }}/{{ item }} -C {{ BaseDir }}/>> install.log"
+  with_items:
+   - base.tgz
+   - eDir9.tgz
+   - eDir9-upd.tgz
+
+- name: Set Owner
+  shell: chown -R root:root {{ BaseDir }} >> install.log
+
+- name: Install eDirectory base
+  shell: "{{ EDPATH }}/nds-install -u >> install.log"
+  args: chdir={{ EDPATH }}/
+
+- name: Install eDirectory patches
+  shell: "rpm -Uvh --force {{ BaseDir }}/edir-upd/*.rpm >> install.log"
+  args: chdir={{ BaseDir }}/edir-upd/
+
+- name: Install eDirectory patches
+  shell: rpm -ivh --force --nodeps {{ EDPATH }}/{{ item }} >> install.log
+  args: chdir={{ EDPATH }}/
+  with_items:
+   - novell-AUDTplatformagent-*.x86_64.rpm
+   - novell-AUDTedirinst-*.x86_64.rpm
+
+- name: Add eDirectory path to bash
+  shell: echo ". /opt/novell/eDirectory/bin/ndspath" >> /etc/bash.bashrc.local
+
+- name: Make copy of schema.cfg
+  shell: cp {{ECPATH}}/schema.cfg {{ECPATH}}/schema.cfg.org
+
+- name: Copy FKS++ schema files for import
+  shell: cp {{ BaseDir }}/schema/*.sch {{EBPATH}}/lib64/nds-schema/
+
+- name: Insert eduorg.sch for import
+  shell: echo "eduorg.sch" >> {{ECPATH}}/schema.cfg
+
+- name: Insert eduperson.sch for import
+  shell: echo "eduperson.sch" >> {{ECPATH}}/schema.cfg
+
+- name: Insert schac.sch for import
+  shell: echo "schac.sch" >> {{ECPATH}}/schema.cfg
+
+- name: Insert noredu.sch for import
+  shell: echo "noredu.sch" >> {{ECPATH}}/schema.cfg
+
+- name: Insert fks.sch for import
+  shell: echo "fks.sch" >> {{ECPATH}}/schema.cfg
+
+- name: Insert pwm.sch for import
+  shell: echo "pwm.sch" >> {{ECPATH}}/schema.cfg
+
+- name: Insert inninfo.sch for import
+  shell: echo "inninfo.sch" >> {{ECPATH}}/schema.cfg
+
+- name: Copy DSRepair
+  shell: cp {{UPATH}}/dsrmenu.sh /sbin/dsrepair
+
+- name: Open Firewall TCP
+  shell: "SuSEfirewall2 open EXT TCP {{ item }}"
+  with_items:
+   - 524
+   - 389
+   - 636
+
+- name: Open Firewall UDP
+  shell: "SuSEfirewall2 open EXT UDP {{ item }}"
+  with_items:
+   - 427
+
+- name: Stop Firewall
+  shell: "systemctl stop SuSEfirewall2"
+

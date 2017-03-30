@@ -1,0 +1,16 @@
+---
+# This playbook will import eDirectory base structure
+
+- name: Stop eDirectory
+  shell: "{{EBPATH}}/bin/ndsmanage stopall"
+
+- name: Import structure LDIF
+  shell: "ldif2dib -b {{UPATH}}/{{ item }} >> install.log"
+  args:
+    chdir: {{UPATH}}/
+  with_items:
+   - aktiv.ldif
+   - meta.ldif
+
+- name: Start eDirectory
+  shell: "{{EBPATH}}/bin/ndsmanage startall"

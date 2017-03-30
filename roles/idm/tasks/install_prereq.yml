@@ -1,0 +1,31 @@
+---
+# These tasks install prerequisites.
+
+- name: Install prereq om RHEL7
+  yum: name={{ item }} state=present
+  with_items:
+   - ksh
+   - gettext.x86_64
+   - libXrender.i686
+   - libXau.i686
+   - libxcb.i686
+   - libX11.i686
+   - libXext.i686
+   - libXi.i686
+   - libXtst.i686
+   - glibc.x86_64
+   - libstdc++.i686
+   - libstdc++.x86_64
+   - libgcc.x86_64
+   - compat-libstdc++-33-*.x86_64
+   - compat-libstdc++-33-*.i686
+  when: ansible_os_family == "RedHat"
+
+- name: Install prereq om SLES12
+  yum: name={{ item }} state=present
+  with_items:
+   - libXtst6-32bit
+   - libXrender-32bit
+   - libXi6-32bit
+  when: ansible_os_family == "SUSE"
+

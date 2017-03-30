@@ -1,0 +1,26 @@
+---
+# This playbook will configure eDirectory.
+
+#- name: Configure eDirectory
+#  shell: "{{EBPATH}}/bin/ndsconfig {{ vm_edir }} -t {{TREENAME}} -S {{ inventory_hostname }} -n ou=Servers.o=System -a cn=admin.ou=SA.o=System -w {{TREEPASS}} -B {{ vm_ipv4_addr }}@524,[{{ vm_ipv6_addr }}]@524 -P ldap://{{ vm_ipv4_addr }}:389,ldaps://{{ vm_ipv4_addr }}:636,ldap://[{{ vm_ipv6_addr }}]:389,ldaps://[{{ vm_ipv6_addr }}]:636 -D {{EIPATH}} -d {{EIPATH}}/data/dib --configure-eba-now yes >> install.log"
+#  args: chdir={{ EBPATH }}/
+
+- name: Configure eDirectory
+  shell: "{{EBPATH}}/bin/ndsconfig {{ vm_edir }} -t {{TREENAME}} -S {{ inventory_hostname }} -n ou=Servers.o=System -a cn=admin.ou=SA.o=System -w {{TREEPASS}} -B {{ vm_ipv4_addr }}@524 -P ldap://{{ vm_ipv4_addr }}:389,ldaps://{{ vm_ipv4_addr }}:636 -D {{EIPATH}} -d {{EIPATH}}/data/dib --configure-eba-now yes >> install.log"
+  args: chdir={{ EBPATH }}/
+
+- name: Start eDirectory
+  shell: "{{EBPATH}}/bin/ndsmanage startall"
+
+- name: Restore schema.cfg
+  shell: "cp {{ECPATH}}/schema.cfg.org {{ECPATH}}/schema.cfg"
+
+- name: Remove eDirectory packages
+  shell: "rm -Rf {{ BaseDir }}/{{ item }} >> install.log"
+  args: chdir={{ BaseDir }}/
+  with_items:
+   - eDir9.tgz
+   - eDir9-upd.tgz
+
+#- name: Start Firewall
+#  shell: "systemctl start SuSEfirewall2"

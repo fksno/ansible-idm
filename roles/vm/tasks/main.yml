@@ -1,0 +1,42 @@
+# Create a new VM from a template using the new vmware_guest module
+  - name: Create VM from template
+    vmware_guest:
+      validate_certs: False
+      hostname: "{{ vcenter_host }}"
+      username: "{{ vcenter_user }}"
+      password: "{{ vcenter_pass }}"
+      datacenter: "{{ vcenter_datacenter }}"
+      folder: "{{ vcenter_folder }}"
+      cluster: "{{ vcenter_cluster }}"
+      resource_pool: "{{ vcenter_resource_pool }}"
+      name: "{{ inventory_hostname }}"
+      template: "{{ vm_template }}"
+      guest_id: "{{ vm_osid }}"
+      networks:
+      - name: "{{ vm_network }}"
+        ip: "{{ vm_ipv4_addr }}"
+        netmask: "{{ vm_ipv4_mask }}"
+        gateway: "{{ vm_ipv4_gw }}"
+        domain: "{{ pri_domain_name }}"
+      customization:
+        hostname: "{{ inventory_hostname }}"
+        domain: "{{ pri_domain_name }}"
+        dns_servers:
+        - 158.39.213.10
+        - 158.38.0.168
+      disk:
+        - size_gb: "{{ vm_disk_size }}"
+          type: "{{ vm_disk_type }}"
+          datastore: "{{ vcenter_datastore }}"
+      hardware:
+        memory_mb: "{{ vm_memory | default(4096) }}"
+        num_cpus: "{{ vm_cpu }}"
+        osid: "{{ vm_osid }}"
+        scsi: paravirtual
+      wait_for_ip_address: True
+      state: present
+    register: result
+
+  - name: IP address info
+    debug:
+      msg: "{{ result.instance.ipv4 }} {{ inventory_hostname }}"

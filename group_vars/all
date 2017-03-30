@@ -1,0 +1,54 @@
+---
+# Variables listed here are applicable to all host groups
+#
+# VMware vCenter
+vcenter_host: 'vcenter.hix.no'
+vcenter_user: 'username'
+vcenter_pass: '***************'
+#
+esxi_host: 'vmware1.hix.no'
+vcenter_datacenter: 'HIX'
+vcenter_cluster: 'HA Cluster'
+vcenter_datastore: 'vmdatastore'
+vcenter_folder: 'Virtual Machines'
+#
+pri_domain_name: 'hix.no'
+ad_domain_name: 'hix.no'
+#
+ntpserver: '158.38.0.168'
+Repo: 'http://a.hihm.no/idm'
+#Installer Base-Path
+BaseDir: '/usr/local/src'
+#eDirectory Installer Path
+EDPATH: '/usr/local/src/eDirectory/setup'
+#eDirectory Instance Path
+EIPATH: '/var/opt/novell/eDirectory'
+#eDirectory Config Path
+ECPATH: '/etc/opt/novell/eDirectory/conf'
+#eDirectory Binary Path
+EBPATH: '/opt/novell/eDirectory'
+#dsrmenu.sh Path
+UPATH: '/usr/local/src/utils'
+#
+sles_idm_packages:
+  - libXtst6-32bit
+  - libXi6-32bit
+#
+rhel_idm_packages:
+  - build-essential
+  - ksh
+  - gettext.x86_64
+  - libXrender.i686
+  - libXau.i686
+  - libxcb.i686
+  - libX11.i686
+  - libXext.i686
+  - libXi.i686
+  - libXtst.i686
+  - glibc.x86_64
+  - libstdc++.i686
+  - libstdc++.x86_64
+  - libgcc.x86_64
+  - compat-libstdc++-33-*.x86_64
+  - compat-libstdc++-33-*.i686
+#

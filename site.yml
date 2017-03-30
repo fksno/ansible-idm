@@ -1,0 +1,38 @@
+---
+# This playbook deploys the whole application stack in this site.
+
+- name: Deploy virtual machine nodes
+  hosts: test
+  gather_facts: false
+  connection: local
+
+  roles:
+    - vm
+
+- name: deploy eDirectory
+  hosts: test
+  remote_user: root
+
+  roles:
+    - edir
+
+- name: Configure eDirectory on master
+  hosts: test-master
+  remote_user: root
+
+  roles:
+    - edir-conf
+
+- name: Configure eDirectory on slaves
+  hosts: test-slave
+  remote_user: root
+
+  roles:
+    - edir-conf
+
+#- name: configure and deploy IDM 4.5.5
+#  hosts: test
+#  remote_user: root
+
+#  roles:
+#    - idm

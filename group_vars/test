@@ -1,0 +1,36 @@
+---
+# Variables listed here are applicable to all host groups
+#
+# VMware vCenter
+vcenter_host: 'vcenterlab.hix.no'
+vcenter_user: 'Administrator@VSPHERE.LOCAL'
+vcenter_pass: '***********'
+vcenter_validate_certs: 'False'
+#
+esxi_host: 'vmlab1.hix.no'
+vcenter_datacenter: 'HiX Testlab'
+vcenter_cluster: 'vmlab cluster'
+vcenter_resource_pool: 'IDM'
+vcenter_datastore: 'vmlab-datastore'
+vcenter_folder: '/IDM'
+#
+pri_domain_name: 'hix.no'
+ad_domain_name: 'hix.no'
+#
+ntpserver: '158.38.0.168'
+#
+vm_template: 'SLES12SP1'
+vm_ipv4_mask: '255.255.255.0'
+vm_ipv4_gw: '158.36.21x.1'
+vm_ipv6_mask: '/64'
+vm_ipv6_gw: '2001:700:1e0x:a600::1'
+vm_disk_size: '80'
+vm_disk_type: 'thin'
+vm_datastore: 'vmlab-datastore'
+vm_network: 'testlab-utvikling'
+vm_memory: '4096'
+vm_cpu: '2'
+vm_osid: 'sles12_64Guest'
+#Base Variables
+TREENAME: 'IDM-TEST'
+TREEPASS: '**********'
