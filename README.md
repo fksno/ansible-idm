@@ -9,7 +9,7 @@ This project is still under development!!!
 Requirements
 ------------
 
-Virtual templates
+Virtual templates and 
 Access to software
 
 License
